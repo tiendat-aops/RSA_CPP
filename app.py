@@ -1,24 +1,32 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from Crypto.Hash import SHA256
 import base64
 import generate_large_prime
 from rsa_uet import BigNumber
 
+# import sys
+# Increase the limit for integer string conversion
+# sys.set_int_max_str_digits(15000)  # Set a new limit, e.g., 10,000 digits
+
 app = Flask(__name__)
 
 # Tạo khóa RSA 
-p = BigNumber(str(generate_large_prime.generate(4096)))
+p = BigNumber(str(generate_large_prime.generate(256)))
 # print(p)
-q = BigNumber(str(generate_large_prime.generate(4096)))
+q = BigNumber(str(generate_large_prime.generate(256)))
 # print(q)
-public_key = BigNumber(str(generate_large_prime.generate(8192)))
+public_key = BigNumber(str(generate_large_prime.generate(512)))
 
 n, phi_n, private_key = public_key.RSA(p, q)
 
-x = BigNumber("123")
-y = x.modularExponentiation(public_key, n)
-x_ = y.modularExponentiation(private_key, n)
-print(x_.getValue() == x.getValue())
+# x = BigNumber("123")
+# y = x.modularExponentiation(public_key, n)
+# x_ = y.modularExponentiation(private_key, n)
+# print(x_.getValue() == x.getValue())
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/sign', methods=['POST'])
 def sign_message():
@@ -38,7 +46,7 @@ def sign_message():
 
     # Ký hash bằng khóa riêng
     message_ = BigNumber(str(message_dec))
-    signature = message_.modularExponentiation(private_key, n)
+    signature = message_.sign_message(private_key, n)
     
     signature_str = str(signature.getValue())
     
@@ -76,7 +84,8 @@ def verify_signature():
     # Xác minh chữ ký
     try:
         signature_ = BigNumber(str(signature))
-        decrypt_message = signature_.modularExponentiation(BigNumber(str(public_key_e)), BigNumber(str(public_key_n)))
+        # decrypt_message = signature_.modularExponentiation(BigNumber(str(public_key_e)), BigNumber(str(public_key_n)))
+        decrypt_message = signature_.verify_message(BigNumber(str(public_key_e)), BigNumber(str(public_key_n)))
         print("Decryp message: ", decrypt_message)
         print("Message decimal in verify: ", message_dec)
         if decrypt_message.getValue() == str(message_dec):

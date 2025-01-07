@@ -20,6 +20,8 @@ PYBIND11_MODULE(rsa_uet, m) {
                "Function to calculate modular inverse using Extended Euclidean Algorithm",
                py::arg("mod"))
           .def("getValue", &BigNumber::getValue, "Get the value of BigNumber as a string")
+          .def("sign_message", &BigNumber::sign_message, "Sign the input")
+          .def("verify_message", &BigNumber::verify_message, "Verify the message")
           .def("__str__", [](const BigNumber &bn) { 
             std::ostringstream oss;
             oss << bn;

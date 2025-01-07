@@ -328,6 +328,16 @@ public:
 
         return make_tuple(n, phi_n, d);
     }
+
+    BigNumber sign_message(BigNumber &private_key, BigNumber &n) {
+        BigNumber x = *this;
+        return x.modularExponentiation(private_key, n);
+    }
+
+    BigNumber verify_message(BigNumber &public_key, BigNumber &n) {
+        BigNumber sig = *this;
+        return sig.modularExponentiation(public_key, n);
+    }
 };
 
 string load_prime(string fileName) {
@@ -345,50 +355,52 @@ string load_prime(string fileName) {
     return primeNumber;
 }
 
-// int main() {
-//     // BigNumber num1("3674911");
-//     // BigNumber num2("6007800");
+int main() {
+    // BigNumber num1("3674911");
+    // BigNumber num2("6007800");
 
-//     // cout << "num1: " << num1 << endl;
-//     // cout << "num2: " << num2 << endl;
+    // cout << "num1: " << num1 << endl;
+    // cout << "num2: " << num2 << endl;
 
-//     // BigNumber sum = num1 + num2;
-//     // cout << "Sum: " << sum << endl;
+    // BigNumber sum = num1 + num2;
+    // cout << "Sum: " << sum << endl;
 
-//     // BigNumber diff = num2 - num1;
-//     // cout << "Difference: " << diff << endl;
+    // BigNumber diff = num2 - num1;
+    // cout << "Difference: " << diff << endl;
 
-//     // BigNumber prod = num1 * num2;
-//     // cout << "Product: " << prod << endl;
+    // BigNumber prod = num1 * num2;
+    // cout << "Product: " << prod << endl;
 
-//     // BigNumber quotient = num2 / num1;
-//     // cout << "Quotient: " << quotient << endl;
+    // BigNumber quotient = num2 / num1;
+    // cout << "Quotient: " << quotient << endl;
 
-//     // BigNumber mod = num2 % num1;
-//     // cout << "Modulo: " << mod << endl;
+    // BigNumber mod = num2 % num1;
+    // cout << "Modulo: " << mod << endl;
 
-//     // cout << "Binary of num1: " << num1.toBinary() << endl;
+    // cout << "Binary of num1: " << num1.toBinary() << endl;
 
-//     // BigNumber modInverse = num1.modularInverse(num2);
-//     // cout << "Modular Inverse of num1 mod num2: " << modInverse << endl;
+    // BigNumber modInverse = num1.modularInverse(num2);
+    // cout << "Modular Inverse of num1 mod num2: " << modInverse << endl;
 
-//     // BigNumber x("5234673");
-//     // BigNumber e("3674911");
-//     // BigNumber n("6012707");
-//     // BigNumber modExp = x.modularExponentiation(e,n);
-//     // cout << "Modular Exponentiation of num1^num2 mod 1000000007: " << modExp << endl;
+    BigNumber x("5234673");
+    BigNumber e("3674911");
+    BigNumber n("6012707");
+    BigNumber sign = x.sign_message(e, n);
+    cout << sign << endl;
+    // BigNumber modExp = x.modularExponentiation(e,n);
+    // cout << "Modular Exponentiation of num1^num2 mod 1000000007: " << modExp << endl;
 
-//     string p_str = load_prime("prime_number_p_512.txt");
-//     string q_str = load_prime("prime_number_q_512.txt");
-//     string e_str = load_prime("prime_number_e_1024.txt");
+    // string p_str = load_prime("prime_number_p_512.txt");
+    // string q_str = load_prime("prime_number_q_512.txt");
+    // string e_str = load_prime("prime_number_e_1024.txt");
 
-//     BigNumber p(p_str);
-//     BigNumber q(q_str);
-//     BigNumber e(e_str);
-//     BigNumber message("123");
+    // BigNumber p(p_str);
+    // BigNumber q(q_str);
+    // BigNumber e(e_str);
+    // BigNumber message("123");
 
-//     cout << "Message: " << message << endl;
+    // cout << "Message: " << message << endl;
 
-//     BigNumber result = message.RSA(p, q, e);
-//     cout << "RSA result: " << result << endl;
-// }
+    // BigNumber result = message.RSA(p, q, e);
+    // cout << "RSA result: " << result << endl;
+}
